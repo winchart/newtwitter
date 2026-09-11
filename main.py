@@ -51,8 +51,20 @@ def start_posting():
 
     try:
         with sync_playwright() as p:
-            # headless=False দিলে রেলওয়েতে ব্রাউজার দেখা যাবে না, তাই True রাখা ভালো
-            browser = p.chromium.launch(headless=True, args=['--no-sandbox', '--disable-setuid-sandbox'])
+            # সার্ভারে ক্র্যাশ এড়াতে প্রয়োজনীয় ফ্ল্যাগগুলো এখানে যুক্ত করা হয়েছে
+            browser = p.chromium.launch(
+                headless=True,
+                args=[
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-dev-shm-usage',
+                    '--disable-accelerated-2d-canvas',
+                    '--no-first-run',
+                    '--no-zygote',
+                    '--single-process',
+                    '--disable-gpu'
+                ]
+            )
             
             for prof in profiles:
                 username = prof.get('username') or prof
@@ -60,9 +72,8 @@ def start_posting():
                 page = context.new_page()
                 
                 try:
-                    # Twitter লগইন পেজে যাওয়া (এখানে আপনার আসল অটোমেশন লজিক কাজ করবে)
+                    # এখানে আপনার টুইটার অটোমেশন বা পোস্টিংয়ের মূল কোড বসবে
                     page.goto("https://twitter.com/login", timeout=60000)
-                    # দরকারমতো প্লেরাইট কোড এখানে এক্সিকিউট হবে
                 except Exception as e:
                     print(f"Error for {username}: {str(e)}")
                 
