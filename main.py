@@ -51,7 +51,7 @@ def start_posting():
 
     try:
         with sync_playwright() as p:
-            # সার্ভারে ক্র্যাশ এড়াতে প্রয়োজনীয় ফ্ল্যাগগুলো এখানে যুক্ত করা হয়েছে
+            # Railway বা ক্লাউড সার্ভারে ব্রাউজার ক্র্যাশ এড়াতে প্রয়োজনীয় আর্গুমেন্টসমূহ
             browser = p.chromium.launch(
                 headless=True,
                 args=[
@@ -72,8 +72,9 @@ def start_posting():
                 page = context.new_page()
                 
                 try:
-                    # এখানে আপনার টুইটার অটোমেশন বা পোস্টিংয়ের মূল কোড বসবে
+                    # Twitter বা X-এর লগইন পেজ বা অটোমেশন টাস্ক
                     page.goto("https://twitter.com/login", timeout=60000)
+                    # আপনার পোস্টিং বা লগইন লজিক এখানে যুক্ত হবে
                 except Exception as e:
                     print(f"Error for {username}: {str(e)}")
                 
