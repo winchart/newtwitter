@@ -51,18 +51,16 @@ def start_posting():
 
     try:
         with sync_playwright() as p:
-            # Railway বা ক্লাউড সার্ভারে ব্রাউজার ক্র্যাশ এড়াতে প্রয়োজনীয় আর্গুমেন্টসমূহ
+            # রেলওয়ের জন্য নিরাপদ এবং সঠিক আর্গুমেন্ট
             browser = p.chromium.launch(
                 headless=True,
                 args=[
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
                     '--disable-dev-shm-usage',
-                    '--disable-accelerated-2d-canvas',
-                    '--no-first-run',
+                    '--disable-gpu',
                     '--no-zygote',
-                    '--single-process',
-                    '--disable-gpu'
+                    '--remote-debugging-port=9222'
                 ]
             )
             
@@ -72,7 +70,6 @@ def start_posting():
                 page = context.new_page()
                 
                 try:
-                    # Twitter বা X-এর লগইন পেজ বা অটোমেশন টাস্ক
                     page.goto("https://twitter.com/login", timeout=60000)
                     # আপনার পোস্টিং বা লগইন লজিক এখানে যুক্ত হবে
                 except Exception as e:
